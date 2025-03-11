@@ -26,6 +26,9 @@ interface Message {
 const ChatApp = () => {
   const [messages, setMessages] = useState<Message[]>([])
   const [messageText, setMessageText] = useState<string>("")
+
+  //Without changing the WebSocket itself, we can handle events like onopen, onmessage, onerror without rendering process.
+
   const wsRef = React.useRef<WebSocket | null>(null) 
 
   console.log("mesajlarrrrr:", messages)
@@ -34,11 +37,14 @@ const ChatApp = () => {
     const socket = new WebSocket("ws://192.168.1.108:3000")
     wsRef.current = socket
 
+    
+    // when the component is first opened
     socket.onopen = () => console.log("Connected to the server!")
 
+    // a message comes from the server, it comes as JSON and we change it to an object
     socket.onmessage = (event) => {
       try {
-        const receivedData: Message = JSON.parse(event.data)
+        const receivedData: Message = JSON.parse(event.data) // parse changes to an object
         setMessages((prevMessages) => [receivedData, ...prevMessages])
       } catch (error) {
         console.error("Error parsing received message:", error)
@@ -63,7 +69,7 @@ const ChatApp = () => {
         user: { _id: mainUser, name: "me" },
         text: messageText,
       }
-
+        // sending the messageData to the server
       wsRef.current.send(JSON.stringify(messageData))
 
       setMessageText("")
