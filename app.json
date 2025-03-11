@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NeonTalk",
-    "slug": "NeonTalk",
+    "name": "WhatsApp-Clone-RN",
+    "slug": "WhatsApp-Clone-RN",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
