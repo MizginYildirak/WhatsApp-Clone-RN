@@ -6,6 +6,8 @@ import {
   TouchableOpacity,
   Text,
   FlatList,
+  ImageBackground,
+  Image,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "react-native-uuid";
@@ -24,12 +26,30 @@ interface Message {
   user: User;
 }
 
-const ChatScreen = ({ route }) => {
+const ChatScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
   const { name, image, _id } = route.params;
 
-  //Without changing the WebSocket itself, we can handle events like onopen, onmessage, onerror without rendering process.
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+        <View style={styles.headerContainer}>
+          <Image source={{ uri: image }} style={styles.profileImage} />
+          <Text style={styles.username}>{name}</Text>
+        </View>
+      ),
+      headerStyle: {
+        backgroundColor: "#fff",
+        height: 100,
+      },
+      headerTintColor: "#2b9b60",
+      headerTitleStyle: {
+        fontSize: 25,
+        fontWeight: "bold",
+      },
+    });
+  }, [navigation, name, image]);
 
   const wsRef = React.useRef<WebSocket | null>(null);
 
@@ -39,13 +59,11 @@ const ChatScreen = ({ route }) => {
     const socket = new WebSocket("ws://192.168.1.108:3000");
     wsRef.current = socket;
 
-    // when the component is first opened
     socket.onopen = () => console.log("Connected to the server!");
 
-    // a message comes from the server, it comes as JSON and we change it to an object
     socket.onmessage = (event) => {
       try {
-        const receivedData: Message = JSON.parse(event.data); // parse changes to an object
+        const receivedData: Message = JSON.parse(event.data);
         setMessages((prevMessages) => [receivedData, ...prevMessages]);
       } catch (error) {
         console.error("Error parsing received message:", error);
@@ -70,7 +88,6 @@ const ChatScreen = ({ route }) => {
         user: { _id: mainUser, name: "me" },
         text: messageText,
       };
-      // sending the messageData to the server
       wsRef.current.send(JSON.stringify(messageData));
 
       setMessageText("");
@@ -78,7 +95,11 @@ const ChatScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={require("../LightModeChatBackground.jpg")}
+      resizeMode="cover"
+    >
       <FlatList
         data={messages}
         renderItem={({ item }) => (
@@ -120,7 +141,7 @@ const ChatScreen = ({ route }) => {
             </View>
             <View>
               <IconButton
-                name="camera"
+                name="camera-outline"
                 size={30}
                 color="black"
                 onPress={() => console.log("Fotoğraf ekleme açıldı!")}
@@ -132,7 +153,7 @@ const ChatScreen = ({ route }) => {
           <Ionicons name="send" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -197,6 +218,20 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  username: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
