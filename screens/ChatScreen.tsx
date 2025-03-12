@@ -23,9 +23,10 @@ interface Message {
   user: User
 }
 
-const ChatApp = () => {
+const ChatScreen = ({route}) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [messageText, setMessageText] = useState<string>("")
+  const { name, image, _id } = route.params;
 
   //Without changing the WebSocket itself, we can handle events like onopen, onmessage, onerror without rendering process.
 
@@ -157,4 +158,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ChatApp
+export default ChatScreen

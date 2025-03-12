@@ -9,6 +9,7 @@ import Chats from "./screens/Chats";
 import Updates from "./screens/Updates";
 import Groups from "./screens/Groups";
 import Calls from "./screens/Calls";
+import ChatScreen from "./screens/ChatScreen";
 import IconButton from "./components/UI/IconButton";
 import { Camera, Search, MoreVertical } from "react-native-feather";
 
@@ -156,6 +157,7 @@ function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={ChatStack} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
