@@ -157,7 +157,7 @@ function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={ChatStack} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen}  />
       </Stack.Navigator>
     </NavigationContainer>
   );
