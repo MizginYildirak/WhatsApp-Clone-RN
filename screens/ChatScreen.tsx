@@ -27,10 +27,6 @@ const ChatScreen = ({ route, navigation }) => {
 
   const { messages, receiveMessage, mainUser } = useChat();
 
-  const date = new Date();
-  const hour = date.getHours();
-  const min = date.getMinutes();
-
   const wsRef = useRef(null);
 
   useEffect(() => {
@@ -85,7 +81,7 @@ const ChatScreen = ({ route, navigation }) => {
         text: messageText,
       };
 
-      console.log("newMessageUserid;", newMessage.user)
+      console.log("newMessageUserid;", newMessage.user);
 
       wsRef.current.send(JSON.stringify(newMessage));
       setMessageText("");
@@ -94,7 +90,6 @@ const ChatScreen = ({ route, navigation }) => {
 
   console.log("messajlar:", messages);
   console.log("Main User2: ", mainUser);
-
 
   return (
     <KeyboardAvoidingView
@@ -118,7 +113,9 @@ const ChatScreen = ({ route, navigation }) => {
               ]}
             >
               <Text style={styles.messageText}>{`${item.text}`}</Text>
-              <Text style={styles.hourText}>{`${hour}:${min}`}</Text>
+              <Text
+                style={styles.hourText}
+              >{`${item.time.hour}:${item.time.minute}`}</Text>
             </View>
           )}
           keyExtractor={(item) => item._id.toString()}

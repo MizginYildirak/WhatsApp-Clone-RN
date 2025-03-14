@@ -11,6 +11,7 @@ interface Message {
   _id: string;
   user: { _id: number; name: string };
   text: string;
+  time: { hour: number; minute: number };
 }
 
 interface ChatContextType {
@@ -26,21 +27,26 @@ export const ChatContext = createContext<ChatContextType | undefined>(
   undefined
 );
 
-export const ChatContextProvider = ({ children }) => {
+export const ChatContextProvider: React.FC<ChatProviderProps> = ({
+  children,
+}) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [mainUser] = useState(() => Math.floor(Math.random() * 1000));
+  const [mainUser] = useState<number>(() => Math.floor(Math.random() * 1000));
 
   const receiveMessage = (text: string) => {
+    const date = new Date();
+    const currentHour = date.getHours();
+    const currentMinute = date.getMinutes();
+
     const newMessage: Message = {
       _id: uuid.v4() as string,
       user: { _id: mainUser, name: "me" },
       text,
+      time: { hour: currentHour, minute: currentMinute },
     };
 
-
-    console.log("newMessageUserid2;", newMessage.user)
+    console.log("newMessageUserid2;", newMessage.user);
     console.log("Main User: ", mainUser);
-
 
     setMessages((prevMessages) => [newMessage, ...prevMessages]);
   };
