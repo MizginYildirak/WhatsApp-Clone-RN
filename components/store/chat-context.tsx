@@ -35,8 +35,8 @@ export const ChatContextProvider: React.FC<ChatProviderProps> = ({
 
   const receiveMessage = (text: string) => {
     const date = new Date();
-    const currentHour = date.getHours();
-    const currentMinute = date.getMinutes();
+    const currentHour = String(date.getHours()).padStart(2, "0");
+    const currentMinute = String(date.getMinutes()).padStart(2, "0");
 
     const newMessage: Message = {
       _id: uuid.v4() as string,
