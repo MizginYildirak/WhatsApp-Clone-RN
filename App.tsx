@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
+import {ChatContextProvider} from "./components/store/chat-context"
 import Chats from "./screens/Chats";
 import Updates from "./screens/Updates";
 import Groups from "./screens/Groups";
@@ -152,6 +153,7 @@ function ChatStack() {
 
 function RootNavigator() {
   return (
+    <ChatContextProvider>
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={ChatStack} />
@@ -181,6 +183,7 @@ function RootNavigator() {
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </ChatContextProvider>
   );
 }
 

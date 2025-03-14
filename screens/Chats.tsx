@@ -26,7 +26,10 @@ export default function Chats() {
     return (
       <TouchableOpacity onPress={openChat} style={styles.chatItem}>
         <Image source={{ uri: item.image }} style={styles.image} />
-        <Text style={styles.name}>{item.name}</Text>
+      <View>
+      <Text style={styles.name}>{item.name}</Text>
+      <Text style={styles.name}>{item.name}</Text>
+      </View>
       </TouchableOpacity>
     );
   }

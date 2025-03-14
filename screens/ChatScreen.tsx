@@ -14,13 +14,18 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "react-native-uuid";
 import IconButton from "../components/UI/IconButton";
+import { useChat } from "../components/store/chat-context";
 
-const mainUser = Math.floor(Math.random() * 1000);
+interface ChatScreenProps {
+  route: { params: { name: string; image: string; _id: string } };
+  navigation: any;
+}
 
 const ChatScreen = ({ route, navigation }) => {
-  const [messages, setMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const { name, image, _id } = route.params;
+
+  const { messages, receiveMessage, mainUser } = useChat();
 
   const date = new Date();
   const hour = date.getHours();
@@ -55,7 +60,7 @@ const ChatScreen = ({ route, navigation }) => {
     socket.onmessage = (event) => {
       try {
         const receivedData = JSON.parse(event.data);
-        setMessages((prevMessages) => [receivedData, ...prevMessages]);
+        receiveMessage(receivedData.text);
       } catch (error) {
         console.error("Error parsing received message:", error);
       }
@@ -72,17 +77,24 @@ const ChatScreen = ({ route, navigation }) => {
     };
   }, []);
 
-  const sendMessage = () => {
+  const sendMessageToServer = () => {
     if (messageText.trim() && wsRef.current) {
-      const messageData = {
+      const newMessage = {
         _id: uuid.v4(),
         user: { _id: mainUser, name: "me" },
         text: messageText,
       };
-      wsRef.current.send(JSON.stringify(messageData));
+
+      console.log("newMessageUserid;", newMessage.user)
+
+      wsRef.current.send(JSON.stringify(newMessage));
       setMessageText("");
     }
   };
+
+  console.log("messajlar:", messages);
+  console.log("Main User2: ", mainUser);
+
 
   return (
     <KeyboardAvoidingView
@@ -107,10 +119,9 @@ const ChatScreen = ({ route, navigation }) => {
             >
               <Text style={styles.messageText}>{`${item.text}`}</Text>
               <Text style={styles.hourText}>{`${hour}:${min}`}</Text>
-
             </View>
           )}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item._id.toString()}
           inverted
           style={styles.flatListStyle}
         />
@@ -141,7 +152,10 @@ const ChatScreen = ({ route, navigation }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+          <TouchableOpacity
+            style={styles.sendButton}
+            onPress={sendMessageToServer}
+          >
             <Ionicons
               name={messageText ? "send" : "mic"}
               size={24}
@@ -171,7 +185,7 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
     marginLeft: 10,
     backgroundColor: "white",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   sentMessage: {
     backgroundColor: "#d8fdd2",
@@ -181,11 +195,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignSelf: "flex-start",
   },
-  messageText: { color: "black", fontSize: 17, position: "relative",     fontWeight: "500" },
+  messageText: {
+    color: "black",
+    fontSize: 17,
+    position: "relative",
+    fontWeight: "500",
+  },
   hourText: {
     position: "relative",
     top: 6,
-    fontSize: 12 
+    fontSize: 12,
   },
   inputContainer: {
     borderRadius: 50,
