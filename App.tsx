@@ -68,7 +68,6 @@ function BottomTabNavigator() {
           title: "WhatsApp",
           headerStyle: {
             height: 95,
-            paddingBottom: 20,
             backgroundColor: "white",
           },
           headerTintColor: "#2b9b60",

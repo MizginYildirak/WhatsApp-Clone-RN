@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +8,8 @@ import {
   FlatList,
   ImageBackground,
   Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "react-native-uuid";
@@ -15,21 +17,16 @@ import IconButton from "../components/UI/IconButton";
 
 const mainUser = Math.floor(Math.random() * 1000);
 
-interface User {
-  _id: number;
-  name: string;
-}
-
-interface Message {
-  _id: number;
-  text: string;
-  user: User;
-}
-
 const ChatScreen = ({ route, navigation }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [messageText, setMessageText] = useState<string>("");
+  const [messages, setMessages] = useState([]);
+  const [messageText, setMessageText] = useState("");
   const { name, image, _id } = route.params;
+
+  const date = new Date();
+  const hour = date.getHours();
+  const min = date.getMinutes();
+
+  const wsRef = useRef(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -43,17 +40,11 @@ const ChatScreen = ({ route, navigation }) => {
         backgroundColor: "#fff",
         height: 100,
       },
-      headerTintColor: "#2b9b60",
       headerTitleStyle: {
         fontSize: 25,
-        fontWeight: "bold",
       },
     });
   }, [navigation, name, image]);
-
-  const wsRef = React.useRef<WebSocket | null>(null);
-
-  console.log("mesajlarrrrr:", messages);
 
   useEffect(() => {
     const socket = new WebSocket("ws://192.168.1.108:3000");
@@ -63,7 +54,7 @@ const ChatScreen = ({ route, navigation }) => {
 
     socket.onmessage = (event) => {
       try {
-        const receivedData: Message = JSON.parse(event.data);
+        const receivedData = JSON.parse(event.data);
         setMessages((prevMessages) => [receivedData, ...prevMessages]);
       } catch (error) {
         console.error("Error parsing received message:", error);
@@ -89,57 +80,58 @@ const ChatScreen = ({ route, navigation }) => {
         text: messageText,
       };
       wsRef.current.send(JSON.stringify(messageData));
-
       setMessageText("");
     }
   };
 
   return (
-    <ImageBackground
-      style={styles.container}
-      source={require("../LightModeChatBackground.jpg")}
-      resizeMode="cover"
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
     >
-      <FlatList
-        data={messages}
-        renderItem={({ item }) => (
-          <View
-            style={[
-              styles.messageContainer,
-              item.user._id === mainUser
-                ? styles.sentMessage
-                : styles.receivedMessage,
-            ]}
-          >
-            <Text style={styles.messageText}>{item.text}</Text>
-          </View>
-        )}
-        keyExtractor={(item) => item._id}
-        inverted
-      />
+      <ImageBackground
+        style={styles.container}
+        source={require("../LightModeChatBackground.jpg")}
+        resizeMode="cover"
+      >
+        <FlatList
+          data={messages}
+          renderItem={({ item }) => (
+            <View
+              style={[
+                styles.messageContainer,
+                item.user._id === mainUser
+                  ? styles.sentMessage
+                  : styles.receivedMessage,
+              ]}
+            >
+              <Text style={styles.messageText}>{`${item.text}`}</Text>
+              <Text style={styles.hourText}>{`${hour}:${min}`}</Text>
 
-      <View style={styles.inputContainer}>
-        <View style={styles.inputRow}>
-          <View>
+            </View>
+          )}
+          keyExtractor={(item) => item._id}
+          inverted
+          style={styles.flatListStyle}
+        />
+
+        <View style={styles.inputContainer}>
+          <View style={styles.inputRow}>
             <IconButton name="sticker-emoji" size={30} color="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Message"
-            placeholderTextColor="#888"
-            value={messageText}
-            onChangeText={setMessageText}
-          />
-          <View style={styles.iconsRow}>
-            <View>
+            <TextInput
+              style={styles.input}
+              placeholder="Message"
+              placeholderTextColor="#888"
+              value={messageText}
+              onChangeText={setMessageText}
+            />
+            <View style={styles.iconsRow}>
               <IconButton
                 name="paperclip"
                 size={30}
                 color="black"
                 onPress={() => console.log("Dosya ekleme açıldı!")}
               />
-            </View>
-            <View>
               <IconButton
                 name="camera-outline"
                 size={30}
@@ -148,34 +140,53 @@ const ChatScreen = ({ route, navigation }) => {
               />
             </View>
           </View>
+
+          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+            <Ionicons
+              name={messageText ? "send" : "mic"}
+              size={24}
+              color="#fff"
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-          <Ionicons name="send" size={24} color="#fff" />
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#121212", paddingTop: 20 },
+  flatListStyle: {
+    marginBottom: 65,
+  },
   messageContainer: {
-    marginBottom: 10,
-    padding: 12,
-    borderRadius: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    marginBottom: 2,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    borderRadius: 16,
     maxWidth: "80%",
     marginLeft: 10,
     backgroundColor: "white",
+    fontWeight: "bold"
   },
   sentMessage: {
-    backgroundColor: "#4A90E2",
+    backgroundColor: "#d8fdd2",
     alignSelf: "flex-end",
   },
   receivedMessage: {
-    backgroundColor: "#8e44ad",
+    backgroundColor: "#fff",
     alignSelf: "flex-start",
   },
-  messageText: { color: "#fff", fontSize: 16 },
+  messageText: { color: "black", fontSize: 17, position: "relative",     fontWeight: "500" },
+  hourText: {
+    position: "relative",
+    top: 6,
+    fontSize: 12 
+  },
   inputContainer: {
     borderRadius: 50,
     flexDirection: "row",
