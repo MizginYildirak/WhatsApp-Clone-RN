@@ -1,15 +1,26 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { useState, useEffect } from "react";
 import uuid from "react-native-uuid";
-import { useNavigation } from "@react-navigation/native"; 
+import { useNavigation } from "@react-navigation/native";
+import { useChat } from "../components/store/chat-context";
 
 const Dummy_Data = [
   {
-    _id: uuid.v4(),
+    user_id: uuid.v4(),
     name: "Bobby Fischer",
-    image: "https://chessacademy.com/cdn/shop/articles/Bobby1_1200x.jpg?v=1651329629",
+    image:
+      "https://chessacademy.com/cdn/shop/articles/Bobby1_1200x.jpg?v=1651329629",
   },
   {
-    _id: uuid.v4(),
+    user_id: uuid.v4(),
     name: "Judit Polgar",
     image:
       "https://londonspeakerbureau.com/wp-content/uploads/2021/02/Judit_Polgar_Keynote_Speaker.jpg",
@@ -17,27 +28,70 @@ const Dummy_Data = [
 ];
 
 export default function Chats() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
+
+  const { messages, receiveMessage, mainUser } = useChat();
+
+  const [lastMessages, setLastMessages] = useState<{
+    [chatId: string]: string;
+  }>({});
+
+  console.log("sonmesajalcammessages:", messages);
+
+
+  useEffect(() => {
+    messages.forEach((msg) => {
+      const chatId = msg.chatId;
+      const lastMsg = lastMessages[chatId];
+
+      console.log("lastMsg:", lastMessages);
+
+      if (lastMsg) {
+        if (
+          msg.time.hour > lastMsg.time.hour ||
+          (msg.time.hour === lastMsg.time.hour &&
+            msg.time.minute > lastMsg.time.minute)
+        ) {
+          setLastMessages((prevMessages) => ({
+            ...prevMessages, 
+            [chatId]: msg,
+          }));
+        }
+      } else {
+        setLastMessages((prevMessages) => ({
+          ...prevMessages,
+          [chatId]: msg,
+      }));
+      }
+    });
+  });
 
   function renderChatsItem({ item }) {
+    console.log("item._id:", item.user_id);
     const openChat = () => {
-      navigation.navigate("ChatScreen", { id: item._id, name: item.name, image: item.image });
+      navigation.navigate("ChatScreen", {
+        user_id: item.user_id,
+        name: item.name,
+        image: item.image,
+      });
     };
     return (
       <TouchableOpacity onPress={openChat} style={styles.chatItem}>
         <Image source={{ uri: item.image }} style={styles.image} />
-      <View>
-      <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.name}>{item.name}</Text>
-      </View>
+        <View>
+          <Text style={styles.name}>{item.name}</Text>
+          <Text style={styles.name}>
+            {lastMessages[item.user_id]?.text || "Henüz mesaj yok"}
+          </Text>
+        </View>
       </TouchableOpacity>
     );
   }
   return (
-    <FlatList 
+    <FlatList
       data={Dummy_Data}
       renderItem={renderChatsItem}
-      keyExtractor={(item) => item._id}  
+      keyExtractor={(item) => item.user_id}
     />
   );
 }

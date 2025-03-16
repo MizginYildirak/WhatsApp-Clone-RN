@@ -17,13 +17,13 @@ import IconButton from "../components/UI/IconButton";
 import { useChat } from "../components/store/chat-context";
 
 interface ChatScreenProps {
-  route: { params: { name: string; image: string; _id: string } };
+  route: { params: { name: string; image: string; user_id: string } };
   navigation: any;
 }
 
 const ChatScreen = ({ route, navigation }) => {
   const [messageText, setMessageText] = useState("");
-  const { name, image, _id } = route.params;
+  const { name, image, user_id } = route.params;
 
   const { messages, receiveMessage, mainUser } = useChat();
 
@@ -56,7 +56,7 @@ const ChatScreen = ({ route, navigation }) => {
     socket.onmessage = (event) => {
       try {
         const receivedData = JSON.parse(event.data);
-        receiveMessage(receivedData.text);
+        receiveMessage(user_id, receivedData.text);
       } catch (error) {
         console.error("Error parsing received message:", error);
       }
@@ -79,6 +79,7 @@ const ChatScreen = ({ route, navigation }) => {
         _id: uuid.v4(),
         user: { _id: mainUser, name: "me" },
         text: messageText,
+        chatId: user_id,
       };
 
       console.log("newMessageUserid;", newMessage.user);
@@ -91,6 +92,10 @@ const ChatScreen = ({ route, navigation }) => {
   console.log("messajlar:", messages);
   console.log("Main User2: ", mainUser);
 
+  const filteredChatMessages = messages.filter(
+    (message) => message.chatId === user_id
+  );
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -102,7 +107,7 @@ const ChatScreen = ({ route, navigation }) => {
         resizeMode="cover"
       >
         <FlatList
-          data={messages}
+          data={filteredChatMessages}
           renderItem={({ item }) => (
             <View
               style={[
