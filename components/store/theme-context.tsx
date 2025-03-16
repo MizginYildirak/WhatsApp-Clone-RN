@@ -1,28 +1,21 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useColorScheme } from 'react-native';
 
 const ThemeContext = createContext();
 
-export const ThemeProvider({children}) {
-    const [darkMode, setDarkMode] = useState(false);
+export const ThemeProvider = ({ children }) => {
+  const colorScheme = useColorScheme();
+  const [isDarkMode, setIsDarkMode] = useState(colorScheme === 'dark');
 
-const toggleDarkMode = () => {
-    setDarkMode((prevMode) => {
-        const newMode = !prevMode
-        document.body.classList.toggle("dark-mode", newMode) //second parameter means if newmode is true then dark-mode class is added.
-        return newMode
-    })
-}
+  useEffect(() => {
+    setIsDarkMode(colorScheme === 'dark');
+  }, [colorScheme]);
 
   return (
-   <ThemeContext.Provider value={{darkMode, toggleDarkMode}}>
-    {children}
-   </ThemeContext.Provider>
-  )
-}
+    <ThemeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
 
-export const useTheme = () => {
-    return useContext(ThemeContext)
-}
-
-const styles = StyleSheet.create({})
+export const useTheme = () => useContext(ThemeContext);
