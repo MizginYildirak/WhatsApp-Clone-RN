@@ -3,18 +3,23 @@ import { StyleSheet, Text, View, Animated, Easing } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-import {ChatContextProvider} from "./components/store/chat-context"
+import { ChatContextProvider } from "./components/store/chat-context";
+import { ThemeContextProvider } from "./components/store/theme-context";
+import {useThemeColors} from "./components/hooks/useThemeColors.js"
+
 import Chats from "./screens/Chats";
 import Updates from "./screens/Updates";
 import Groups from "./screens/Groups";
 import Calls from "./screens/Calls";
 import ChatScreen from "./screens/ChatScreen";
-import IconButton from "./components/UI/IconButton";
+
 import { camera, Search, MoreVertical } from "react-native-feather";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import IconButton from "./components/UI/IconButton";
 
 const BottomTabs = createBottomTabNavigator();
+const colors = useThemeColors()
 
 function BottomTabNavigator() {
   return (
@@ -32,7 +37,7 @@ function BottomTabNavigator() {
           } else if (route.name === "Groups") {
             iconName = "account-group";
           } else if (route.name === "Calls") {
-            iconName = "phone"; 
+            iconName = "phone";
           }
 
           return (
@@ -153,37 +158,51 @@ function ChatStack() {
 
 function RootNavigator() {
   return (
-    <ChatContextProvider>
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={ChatStack} />
-        <Stack.Screen
-          name="ChatScreen"
-          component={ChatScreen}
-          options={{
-            headerShown: true,
-            headerRight: () => {
-              return (
-                <View
-                  style={{
-                    marginRight: 15,
-                    flexDirection: "row",
-                    gap: 25,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <IconButton name="video-outline" size={28} color="black" />
-                  <IconButton name="phone-outline" size={24} color="black" />
-                  <IconButton name="dots-vertical" size={24} color="black" />
-                </View>
-              );
-            },
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </ChatContextProvider>
+    <ThemeContextProvider>
+      <ChatContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={ChatStack} />
+            <Stack.Screen
+              name="ChatScreen"
+              component={ChatScreen}
+              options={{
+                headerShown: true,
+                headerRight: () => {
+                  return (
+                    <View
+                      style={{
+                        marginRight: 15,
+                        flexDirection: "row",
+                        gap: 25,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <IconButton
+                        name="video-outline"
+                        size={28}
+                        color="black"
+                      />
+                      <IconButton
+                        name="phone-outline"
+                        size={24}
+                        color="black"
+                      />
+                      <IconButton
+                        name="dots-vertical"
+                        size={24}
+                        color="black"
+                      />
+                    </View>
+                  );
+                },
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ChatContextProvider>
+    </ThemeContextProvider>
   );
 }
 
