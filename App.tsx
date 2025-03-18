@@ -1,27 +1,33 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Animated, Easing } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { ChatContextProvider } from "./components/store/chat-context";
 import { ThemeContextProvider } from "./components/store/theme-context";
-import {useThemeColors} from "./components/hooks/useThemeColors.js"
+import { useThemeColors } from "./components/hooks/useThemeColors.js";
 
 import Chats from "./screens/Chats";
 import Updates from "./screens/Updates";
 import Groups from "./screens/Groups";
 import Calls from "./screens/Calls";
 import ChatScreen from "./screens/ChatScreen";
+import ThreeDotsMenu from "./components/utils/ThreeDotsMenu";
+import SettingsScreen from "./screens/SettingsScreen";
+
+import { Provider as PaperProvider } from "react-native-paper";
 
 import { camera, Search, MoreVertical } from "react-native-feather";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import IconButton from "./components/UI/IconButton";
 
 const BottomTabs = createBottomTabNavigator();
-const colors = useThemeColors()
 
 function BottomTabNavigator() {
+  const colors = useThemeColors();
+  const navigation = useNavigation();
+
   return (
     <BottomTabs.Navigator
       screenOptions={({ route }) => ({
@@ -82,11 +88,39 @@ function BottomTabNavigator() {
             fontSize: 25,
           },
           headerRight: () => {
+            const menuItems = [
+              {
+                title: "New Group",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "New broadcast",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Linked devices",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Starred messages",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Settings",
+                onPress: () => navigation.navigate("SettingsScreen"),
+              },
+            ];
             return (
-              <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  gap: 25,
+                  marginRight: 25,
+                }}
+              >
                 <IconButton name="camera-outline" size={25} color="black" />
                 <IconButton name="magnify" size={25} color="black" />
-                <IconButton name="dots-vertical" size={24} color="black" />
+                <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
           },
@@ -100,10 +134,24 @@ function BottomTabNavigator() {
             fontSize: 25,
           },
           headerRight: () => {
+            const menuItems = [
+              {
+                title: "Create Channel",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Status Privacy",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Settings",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+            ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
                 <IconButton name="magnify" size={25} color="black" />
-                <IconButton name="dots-vertical" size={24} color="black" />
+                <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
           },
@@ -117,9 +165,15 @@ function BottomTabNavigator() {
             fontSize: 25,
           },
           headerRight: () => {
+            const menuItems = [
+              {
+                title: "Settings",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+            ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="dots-vertical" size={24} color="black" />
+                <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
           },
@@ -133,10 +187,20 @@ function BottomTabNavigator() {
             fontSize: 25,
           },
           headerRight: () => {
+            const menuItems = [
+              {
+                title: "Clear call logs",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+              {
+                title: "Settings",
+                onPress: () => console.log("Option 1 is pressed"),
+              },
+            ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
                 <IconButton name="magnify" size={25} color="black" />
-                <IconButton name="dots-vertical" size={24} color="black" />
+                <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
           },
@@ -158,51 +222,54 @@ function ChatStack() {
 
 function RootNavigator() {
   return (
-    <ThemeContextProvider>
-      <ChatContextProvider>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Home" component={ChatStack} />
-            <Stack.Screen
-              name="ChatScreen"
-              component={ChatScreen}
-              options={{
-                headerShown: true,
-                headerRight: () => {
-                  return (
-                    <View
-                      style={{
-                        marginRight: 15,
-                        flexDirection: "row",
-                        gap: 25,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <IconButton
-                        name="video-outline"
-                        size={28}
-                        color="black"
-                      />
-                      <IconButton
-                        name="phone-outline"
-                        size={24}
-                        color="black"
-                      />
-                      <IconButton
-                        name="dots-vertical"
-                        size={24}
-                        color="black"
-                      />
-                    </View>
-                  );
-                },
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </ChatContextProvider>
-    </ThemeContextProvider>
+    <PaperProvider>
+      <ThemeContextProvider>
+        <ChatContextProvider>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Home" component={ChatStack} />
+              <Stack.Screen
+                name="ChatScreen"
+                component={ChatScreen}
+                options={{
+                  headerShown: true,
+                  headerRight: () => {
+                    return (
+                      <View
+                        style={{
+                          marginRight: 15,
+                          flexDirection: "row",
+                          gap: 25,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <IconButton
+                          name="video-outline"
+                          size={28}
+                          color="black"
+                        />
+                        <IconButton
+                          name="phone-outline"
+                          size={24}
+                          color="black"
+                        />
+                        <IconButton
+                          name="dots-vertical"
+                          size={24}
+                          color="black"
+                        />
+                      </View>
+                    );
+                  },
+                }}
+              />
+              <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ChatContextProvider>
+      </ThemeContextProvider>
+    </PaperProvider>
   );
 }
 
