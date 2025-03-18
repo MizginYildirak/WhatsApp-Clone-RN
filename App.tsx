@@ -15,6 +15,7 @@ import Calls from "./screens/Calls";
 import ChatScreen from "./screens/ChatScreen";
 import ThreeDotsMenu from "./components/utils/ThreeDotsMenu";
 import SettingsScreen from "./screens/SettingsScreen";
+import ThemeScreen from "./screens/ThemeScreen"
 
 import { Provider as PaperProvider } from "react-native-paper";
 
@@ -107,7 +108,7 @@ function BottomTabNavigator() {
               },
               {
                 title: "Settings",
-                onPress: () => navigation.navigate("SettingsScreen"),
+                onPress: () => navigation.navigate("Settings"),
               },
             ];
             return (
@@ -264,7 +265,8 @@ function RootNavigator() {
                   },
                 }}
               />
-              <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
+              <Stack.Screen name="ThemeScreen" component={ThemeScreen} options={{headerShown: true}} />
             </Stack.Navigator>
           </NavigationContainer>
         </ChatContextProvider>

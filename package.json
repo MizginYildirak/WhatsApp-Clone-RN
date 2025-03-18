@@ -37,6 +37,7 @@
     "@react-native-community/cli": "^18.0.0",
     "@types/react": "~18.3.12",
     "@types/react-native": "^0.73.0",
+    "react-devtools": "^6.1.1",
     "typescript": "^5.3.3"
   },
   "private": true
