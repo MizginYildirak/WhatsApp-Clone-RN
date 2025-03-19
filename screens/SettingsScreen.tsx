@@ -65,6 +65,7 @@ export default function SettingsScreen() {
           description={setting.description}
           onPress={() => {
             if (setting.title === "Chats") {
+              console.log("basıyorummmm")
               navigation.navigate("ThemeScreen");
             }
           }}
