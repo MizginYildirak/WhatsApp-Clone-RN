@@ -1,10 +1,13 @@
-import { View, Image, Text, StyleSheet } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { SettingsSectionItem } from "../components/utils/Settings";
 import { useNavigation } from "@react-navigation/native";
+import { useThemeColors } from "../components/hooks/useThemeColors.js";
+import ProfileInfo from "../components/ProfileInfo"
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
-  
+  const colors = useThemeColors();
+
   const settings = [
     {
       icon: "key-outline",
@@ -45,18 +48,23 @@ export default function SettingsScreen() {
     { icon: "help", title: "Help", description: "" },
   ];
 
+  const screenMapping = {
+    Chats: "ThemeScreen",
+  };
+
+  const openProfileInfo = () => {
+    navigation.navigate("Profile")
+  }
+
   return (
-    <View style={styles.container}>
-      <View style={styles.profileInfo}>
-        <Image
-          source={require("../MagnusCarlsenAvatar.png")}
-          style={styles.profileImage}
-        />
-        <View>
-          <Text style={styles.profileName}>Magnus Carlsen</Text>
-          <Text style={styles.profileStatus}>Mozart of Chess</Text>
-        </View>
-      </View>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ProfileInfo 
+      name="Magnus Carlsen"
+      status="Mozart of Chess"
+      image={require("../MagnusCarlsenAvatar.png")}
+      onPress={() => navigation.navigate("Profile")}
+      />
+
       {settings.map((setting, index) => (
         <SettingsSectionItem
           key={index}
@@ -64,9 +72,9 @@ export default function SettingsScreen() {
           title={setting.title}
           description={setting.description}
           onPress={() => {
-            if (setting.title === "Chats") {
-              console.log("basıyorummmm")
-              navigation.navigate("ThemeScreen");
+            const screenName = screenMapping[setting.title];
+            if (screenName) {
+              navigation.navigate(screenName);
             }
           }}
         />
@@ -79,12 +87,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "white",
   },
   profileInfo: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 24,
+    padding: 10,
+    borderRadius: 12,
+
   },
   profileImage: {
     width: 80,

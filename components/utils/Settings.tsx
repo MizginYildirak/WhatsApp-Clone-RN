@@ -1,17 +1,21 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import IconButton from "../UI/IconButton";
+import { useThemeColors } from "../hooks/useThemeColors.js";
 
-export const SettingsSectionItem = ({ title, description, onPress, icon }) => (
-  <TouchableOpacity onPress={onPress} style={styles.sectionItem}>
-    <IconButton name={icon} style={{ fontSize: 18 }} />
-    <View>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
-    </View>
-  </TouchableOpacity>
-);
+export const SettingsSectionItem = ({ title, description, onPress, icon }) => {
+  const colors = useThemeColors()
 
+  return (
+    <TouchableOpacity onPress={onPress} style={[styles.sectionItem, { backgroundColor: colors.background }]}>
+      <IconButton name={icon} style={{ fontSize: 18, color: colors.text }} />
+      <View>
+        <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+        <Text style={[styles.description, { color: colors.text }]}>{description}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   sectionItem: {
@@ -19,7 +23,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 18,
     paddingHorizontal: 10,
-    gap: 30
+    gap: 30,
+    borderRadius: 8,
   },
   title: {
     fontSize: 18,
@@ -27,6 +32,5 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 15,
-    color: "#777",
   },
 });

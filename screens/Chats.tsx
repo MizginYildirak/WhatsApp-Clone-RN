@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { useNavigation } from "@react-navigation/native";
 import { useChat } from "../components/store/chat-context";
+import { useThemeColors } from "../components/hooks/useThemeColors.js";
 
 const Dummy_Data = [
   {
@@ -29,6 +30,7 @@ const Dummy_Data = [
 
 export default function Chats() {
   const navigation = useNavigation();
+  const colors = useThemeColors();
 
   const { messages, receiveMessage, mainUser } = useChat();
 
@@ -38,6 +40,28 @@ export default function Chats() {
 
   console.log("sonmesajalcammessages:", messages);
 
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+    },
+    chatItem: {
+      flexDirection: "row",
+      padding: 10,
+      alignItems: "center",
+      backgroundColor: colors.background,
+    },
+    image: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+      marginRight: 10,
+    },
+    name: {
+      fontSize: 18,
+      color: colors.text
+    },
+  });
 
   useEffect(() => {
     messages.forEach((msg) => {
@@ -53,7 +77,7 @@ export default function Chats() {
             msg.time.minute > lastMsg.time.minute)
         ) {
           setLastMessages((prevMessages) => ({
-            ...prevMessages, 
+            ...prevMessages,
             [chatId]: msg,
           }));
         }
@@ -61,7 +85,7 @@ export default function Chats() {
         setLastMessages((prevMessages) => ({
           ...prevMessages,
           [chatId]: msg,
-      }));
+        }));
       }
     });
   });
@@ -95,25 +119,3 @@ export default function Chats() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
-  chatItem: {
-    flexDirection: "row",
-    padding: 10,
-    alignItems: "center",
-    backgroundColor: "white",
-  },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
-  name: {
-    fontSize: 18,
-  },
-});

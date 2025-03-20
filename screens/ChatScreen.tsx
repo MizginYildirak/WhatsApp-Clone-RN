@@ -15,6 +15,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "react-native-uuid";
 import IconButton from "../components/UI/IconButton";
 import { useChat } from "../components/store/chat-context";
+import { useThemeColors } from "../components/hooks/useThemeColors.js";
 
 interface ChatScreenProps {
   route: { params: { name: string; image: string; user_id: string } };
@@ -28,6 +29,104 @@ const ChatScreen = ({ route, navigation }) => {
   const { messages, receiveMessage, mainUser } = useChat();
 
   const wsRef = useRef(null);
+  const colors = useThemeColors();
+
+  const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: colors.background, paddingTop: 20 },
+    flatListStyle: {
+      marginBottom: 65,
+    },
+    messageContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 16,
+      marginBottom: 2,
+      paddingVertical: 5,
+      paddingHorizontal: 12,
+      borderRadius: 16,
+      maxWidth: "80%",
+      marginLeft: 10,
+      backgroundColor: "white",
+      fontWeight: "bold",
+    },
+    sentMessage: {
+      backgroundColor: "#d8fdd2",
+      alignSelf: "flex-end",
+    },
+    receivedMessage: {
+      backgroundColor: "#fff",
+      alignSelf: "flex-start",
+    },
+    messageText: {
+      color: "black",
+      fontSize: 17,
+      position: "relative",
+      fontWeight: "500",
+    },
+    hourText: {
+      position: "relative",
+      top: 6,
+      fontSize: 12,
+    },
+    inputContainer: {
+      borderRadius: 50,
+      flexDirection: "row",
+      alignItems: "center",
+      paddingVertical: 10,
+      paddingHorizontal: 3,
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      gap: 6,
+    },
+    inputRow: {
+      backgroundColor: colors.background,
+      flexDirection: "row",
+      borderRadius: 50,
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "space-between",
+      paddingHorizontal: 10,
+    },
+    input: {
+      flex: 1,
+      height: 50,
+      fontSize: 16,
+      color: "#000",
+      backgroundColor: colors.background,
+      borderRadius: 50,
+      marginRight: 10,
+    },
+    iconsRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      gap: 15,
+    },
+    sendButton: {
+      padding: 12,
+      backgroundColor: "#2b9b60",
+      borderRadius: 30,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    headerContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    profileImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      marginRight: 10,
+    },
+    username: {
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+  });  
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,7 +137,7 @@ const ChatScreen = ({ route, navigation }) => {
         </View>
       ),
       headerStyle: {
-        backgroundColor: "#fff",
+        backgroundColor: colors.background,
         height: 100,
       },
       headerTitleStyle: {
@@ -130,7 +229,7 @@ const ChatScreen = ({ route, navigation }) => {
 
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
-            <IconButton name="sticker-emoji" size={30} color="black" />
+            <IconButton name="sticker-emoji" size={30} color={colors.text} />
             <TextInput
               style={styles.input}
               placeholder="Message"
@@ -142,13 +241,13 @@ const ChatScreen = ({ route, navigation }) => {
               <IconButton
                 name="paperclip"
                 size={30}
-                color="black"
+                color={colors.text}
                 onPress={() => console.log("Dosya ekleme açıldı!")}
               />
               <IconButton
                 name="camera-outline"
                 size={30}
-                color="black"
+                color={colors.text}
                 onPress={() => console.log("Fotoğraf ekleme açıldı!")}
               />
             </View>
@@ -161,7 +260,7 @@ const ChatScreen = ({ route, navigation }) => {
             <Ionicons
               name={messageText ? "send" : "mic"}
               size={24}
-              color="#fff"
+              color={colors.text}
             />
           </TouchableOpacity>
         </View>
@@ -170,101 +269,5 @@ const ChatScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#121212", paddingTop: 20 },
-  flatListStyle: {
-    marginBottom: 65,
-  },
-  messageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 16,
-    marginBottom: 2,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
-    borderRadius: 16,
-    maxWidth: "80%",
-    marginLeft: 10,
-    backgroundColor: "white",
-    fontWeight: "bold",
-  },
-  sentMessage: {
-    backgroundColor: "#d8fdd2",
-    alignSelf: "flex-end",
-  },
-  receivedMessage: {
-    backgroundColor: "#fff",
-    alignSelf: "flex-start",
-  },
-  messageText: {
-    color: "black",
-    fontSize: 17,
-    position: "relative",
-    fontWeight: "500",
-  },
-  hourText: {
-    position: "relative",
-    top: 6,
-    fontSize: 12,
-  },
-  inputContainer: {
-    borderRadius: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 3,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    gap: 6,
-  },
-  inputRow: {
-    backgroundColor: "white",
-    flexDirection: "row",
-    borderRadius: 50,
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-  },
-  input: {
-    flex: 1,
-    height: 50,
-    fontSize: 16,
-    color: "#000",
-    backgroundColor: "white",
-    borderRadius: 50,
-    marginRight: 10,
-  },
-  iconsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 15,
-  },
-  sendButton: {
-    padding: 12,
-    backgroundColor: "#2b9b60",
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  username: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
 
 export default ChatScreen;

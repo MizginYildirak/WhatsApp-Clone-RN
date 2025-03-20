@@ -16,6 +16,7 @@ import ChatScreen from "./screens/ChatScreen";
 import ThreeDotsMenu from "./components/utils/ThreeDotsMenu";
 import SettingsScreen from "./screens/SettingsScreen";
 import ThemeScreen from "./screens/ThemeScreen"
+import ProfileScreen from "./screens/ProfileScreen"
 
 import { Provider as PaperProvider } from "react-native-paper";
 
@@ -33,7 +34,7 @@ function BottomTabNavigator() {
     <BottomTabs.Navigator
       screenOptions={({ route }) => ({
         tabBarLabelStyle: { fontSize: 15 },
-        tabBarStyle: { height: 72, paddingTop: 16, paddingBottom: 5 },
+        tabBarStyle: { height: 72, paddingTop: 16, paddingBottom: 5, backgroundColor: colors.background },
         tabBarIcon: ({ color, size, focused }) => {
           let iconName;
 
@@ -54,7 +55,7 @@ function BottomTabNavigator() {
                 alignItems: "center",
                 justifyContent: "center",
                 backgroundColor: focused
-                  ? "rgba(37, 211, 102, 0.3)"
+                  ? colors.primaryLight
                   : "transparent",
                 borderRadius: 20,
                 width: 78,
@@ -70,8 +71,8 @@ function BottomTabNavigator() {
             </View>
           );
         },
-        tabBarActiveTintColor: "rgba(0, 0, 0, 0.6)",
-        tabBarInactiveTintColor: "rgba(0, 0, 0, 0.6)",
+        tabBarActiveTintColor: colors.text,
+        tabBarInactiveTintColor: colors.text,
       })}
     >
       <BottomTabs.Screen
@@ -81,9 +82,9 @@ function BottomTabNavigator() {
           title: "WhatsApp",
           headerStyle: {
             height: 95,
-            backgroundColor: "white",
+            backgroundColor: colors.background,
           },
-          headerTintColor: "#2b9b60",
+          headerTintColor: colors.primary,
           headerTitleStyle: {
             fontWeight: "bold",
             fontSize: 25,
@@ -119,8 +120,8 @@ function BottomTabNavigator() {
                   marginRight: 25,
                 }}
               >
-                <IconButton name="camera-outline" size={25} color="black" />
-                <IconButton name="magnify" size={25} color="black" />
+                <IconButton name="camera-outline" size={25} color={colors.text} />
+                <IconButton name="magnify" size={25} color={colors.text}  />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -151,7 +152,7 @@ function BottomTabNavigator() {
             ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color="black" />
+                <IconButton name="magnify" size={25} color={colors.text}  />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -200,7 +201,7 @@ function BottomTabNavigator() {
             ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color="black" />
+                <IconButton name="magnify" size={25} color={colors.text}  />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -267,6 +268,7 @@ function RootNavigator() {
               />
               <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
               <Stack.Screen name="ThemeScreen" component={ThemeScreen} options={{headerShown: true}} />
+              <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: true}} />
             </Stack.Navigator>
           </NavigationContainer>
         </ChatContextProvider>
