@@ -1,10 +1,28 @@
+import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import ProfileInfo from "../components/ProfileInfo";
 import { SettingsSectionItem } from "../components/utils/Settings";
+import * as ImagePicker from "expo-image-picker";
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
+  const [image, setImage] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
 
   const profileData = [
     { icon: "account-circle-outline", title: "Name", description: "Magnus Carlsen" },
@@ -15,22 +33,20 @@ export default function ProfileScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ProfileInfo
-        image={require("../MagnusCarlsenAvatar.png")}
+        image={image ? { uri: image } : require("../MagnusCarlsenAvatar.png")} 
         style={{ height: 200, width: 200, borderRadius: 100 }}
-        onPress={() => console.log("Profile Pressed")}
+        onPress={pickImage} 
       />
 
-      {profileData.map((data, index) => {
-        return (
-          <SettingsSectionItem
-            key={index}
-            icon={data.icon}
-            title={data.title}
-            description={data.description}
-            style={{alignItems: "flex-start"}}
-          />
-        );
-      })}
+      {profileData.map((data, index) => (
+        <SettingsSectionItem
+          key={index}
+          icon={data.icon}
+          title={data.title}
+          description={data.description}
+          style={{ alignSelf: "flex-start" }}
+        />
+      ))}
     </View>
   );
 }
