@@ -16,13 +16,15 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mizginyildirak.WhatsAppCloneRN"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.mizginyildirak.WhatsAppCloneRN"
     },
     "web": {
       "favicon": "./assets/favicon.png"
