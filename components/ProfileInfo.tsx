@@ -1,15 +1,23 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
+import { useProfile } from "../components/store/profile-context";
 
 export default function ProfileInfo({ name, status, image, onPress, style }) {
   const colors = useThemeColors();
+  const { profileImage } = useProfile();
+
+  console.log("Profile Image:", profileImage);
+
 
   return (
     <TouchableOpacity
       style={[styles.profileInfo, { backgroundColor: colors.background }]}
       onPress={onPress}
     >
-      <Image source={image} style={[styles.profileImage, style]} />
+      <Image
+        source={image}
+        style={[styles.profileImage, style]}
+      />
       <View>
         <Text style={[styles.profileName, { color: colors.text }]}>{name}</Text>
         <Text style={[styles.profileStatus, { color: colors.text }]}>
