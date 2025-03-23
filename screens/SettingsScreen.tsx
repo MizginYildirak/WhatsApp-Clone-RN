@@ -2,11 +2,13 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { SettingsSectionItem } from "../components/utils/Settings";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
+import { useProfile } from "../components/store/profile-context";
 import ProfileInfo from "../components/ProfileInfo";
 
 export default function SettingsScreen() {
   const navigation = useNavigation();
   const colors = useThemeColors();
+  const { profileImage } = useProfile();
 
   const settings = [
     {
@@ -59,9 +61,9 @@ export default function SettingsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ProfileInfo
+        image={profileImage}
         name="Magnus Carlsen"
         status="Mozart of Chess"
-        image={require("../MagnusCarlsenAvatar.png")}
         onPress={() => navigation.navigate("Profile")}
       />
 
