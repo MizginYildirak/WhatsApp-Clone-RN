@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { ChatContextProvider } from "./components/store/chat-context";
 import { ThemeContextProvider } from "./components/store/theme-context";
+import { ProfileContextProvider } from "./components/store/profile-context";
 import { useThemeColors } from "./components/hooks/useThemeColors.js";
 
 import Chats from "./screens/Chats";
@@ -15,8 +16,8 @@ import Calls from "./screens/Calls";
 import ChatScreen from "./screens/ChatScreen";
 import ThreeDotsMenu from "./components/utils/ThreeDotsMenu";
 import SettingsScreen from "./screens/SettingsScreen";
-import ThemeScreen from "./screens/ThemeScreen"
-import ProfileScreen from "./screens/ProfileScreen"
+import ThemeScreen from "./screens/ThemeScreen";
+import ProfileScreen from "./screens/ProfileScreen";
 
 import { Provider as PaperProvider } from "react-native-paper";
 
@@ -34,7 +35,12 @@ function BottomTabNavigator() {
     <BottomTabs.Navigator
       screenOptions={({ route }) => ({
         tabBarLabelStyle: { fontSize: 15 },
-        tabBarStyle: { height: 72, paddingTop: 16, paddingBottom: 5, backgroundColor: colors.background },
+        tabBarStyle: {
+          height: 72,
+          paddingTop: 16,
+          paddingBottom: 5,
+          backgroundColor: colors.background,
+        },
         tabBarIcon: ({ color, size, focused }) => {
           let iconName;
 
@@ -54,9 +60,7 @@ function BottomTabNavigator() {
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: focused
-                  ? colors.primaryLight
-                  : "transparent",
+                backgroundColor: focused ? colors.primaryLight : "transparent",
                 borderRadius: 20,
                 width: 78,
                 height: 36,
@@ -120,8 +124,12 @@ function BottomTabNavigator() {
                   marginRight: 25,
                 }}
               >
-                <IconButton name="camera-outline" size={25} color={colors.text} />
-                <IconButton name="magnify" size={25} color={colors.text}  />
+                <IconButton
+                  name="camera-outline"
+                  size={25}
+                  color={colors.text}
+                />
+                <IconButton name="magnify" size={25} color={colors.text} />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -152,7 +160,7 @@ function BottomTabNavigator() {
             ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color={colors.text}  />
+                <IconButton name="magnify" size={25} color={colors.text} />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -201,7 +209,7 @@ function BottomTabNavigator() {
             ];
             return (
               <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color={colors.text}  />
+                <IconButton name="magnify" size={25} color={colors.text} />
                 <ThreeDotsMenu menuItems={menuItems} />
               </View>
             );
@@ -225,54 +233,68 @@ function ChatStack() {
 function RootNavigator() {
   return (
     <PaperProvider>
-      <ThemeContextProvider>
-        <ChatContextProvider>
-          <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="Home" component={ChatStack} />
-              <Stack.Screen
-                name="ChatScreen"
-                component={ChatScreen}
-                options={{
-                  headerShown: true,
-                  headerRight: () => {
-                    return (
-                      <View
-                        style={{
-                          marginRight: 15,
-                          flexDirection: "row",
-                          gap: 25,
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <IconButton
-                          name="video-outline"
-                          size={28}
-                          color="black"
-                        />
-                        <IconButton
-                          name="phone-outline"
-                          size={24}
-                          color="black"
-                        />
-                        <IconButton
-                          name="dots-vertical"
-                          size={24}
-                          color="black"
-                        />
-                      </View>
-                    );
-                  },
-                }}
-              />
-              <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
-              <Stack.Screen name="ThemeScreen" component={ThemeScreen} options={{headerShown: true}} />
-              <Stack.Screen name="Profile" component={ProfileScreen} options={{headerShown: true}} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </ChatContextProvider>
-      </ThemeContextProvider>
+      <ProfileContextProvider>
+        <ThemeContextProvider>
+          <ChatContextProvider>
+            <NavigationContainer>
+              <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Home" component={ChatStack} />
+                <Stack.Screen
+                  name="ChatScreen"
+                  component={ChatScreen}
+                  options={{
+                    headerShown: true,
+                    headerRight: () => {
+                      return (
+                        <View
+                          style={{
+                            marginRight: 15,
+                            flexDirection: "row",
+                            gap: 25,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <IconButton
+                            name="video-outline"
+                            size={28}
+                            color="black"
+                          />
+                          <IconButton
+                            name="phone-outline"
+                            size={24}
+                            color="black"
+                          />
+                          <IconButton
+                            name="dots-vertical"
+                            size={24}
+                            color="black"
+                          />
+                        </View>
+                      );
+                    },
+                  }}
+                />
+                <Stack.Screen
+                  name="Settings"
+                  component={SettingsScreen}
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen
+                  name="ThemeScreen"
+                  component={ThemeScreen}
+                  options={{ headerShown: true }}
+                />
+                <Stack.Screen
+                  name="Profile"
+                  component={ProfileScreen}
+                  options={{ headerShown: true }}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </ChatContextProvider>
+        </ThemeContextProvider>
+      </ProfileContextProvider>
     </PaperProvider>
   );
 }
