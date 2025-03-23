@@ -4,38 +4,47 @@ import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import ProfileInfo from "../components/ProfileInfo";
 import { SettingsSectionItem } from "../components/utils/Settings";
 import * as ImagePicker from "expo-image-picker";
+import { useProfile } from "../components/store/profile-context";
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
-  const [image, setImage] = useState<string | null>(null);
+  const { profileImage, setProfileImage } = useProfile();
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     });
 
     console.log(result);
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      setProfileImage(result.assets[0].uri);
     }
   };
 
   const profileData = [
-    { icon: "account-circle-outline", title: "Name", description: "Magnus Carlsen" },
-    { icon: "information-outline", title: "About", description: "Mozart of Chess" },
+    {
+      icon: "account-circle-outline",
+      title: "Name",
+      description: "Magnus Carlsen",
+    },
+    {
+      icon: "information-outline",
+      title: "About",
+      description: "Mozart of Chess",
+    },
     { icon: "phone", title: "Phone", description: "+1234567890" },
   ];
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ProfileInfo
-        image={image ? { uri: image } : require("../MagnusCarlsenAvatar.png")} 
+        image={profileImage}
         style={{ height: 200, width: 200, borderRadius: 100 }}
-        onPress={pickImage} 
+        onPress={pickImage}
       />
 
       {profileData.map((data, index) => (
