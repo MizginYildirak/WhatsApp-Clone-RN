@@ -31,6 +31,8 @@ function BottomTabNavigator() {
   const colors = useThemeColors();
   const navigation = useNavigation();
 
+  console.log("colors:", colors)
+
   return (
     <BottomTabs.Navigator
       screenOptions={({ route }) => ({
@@ -67,6 +69,7 @@ function BottomTabNavigator() {
                 marginBottom: 10,
               }}
             >
+              
               <Icon
                 name={iconName}
                 color={focused ? "#2b9b60" : color}

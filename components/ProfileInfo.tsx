@@ -8,14 +8,13 @@ export default function ProfileInfo({ name, status, image, onPress, style }) {
 
   console.log("Profile Image:", profileImage);
 
-
   return (
     <TouchableOpacity
       style={[styles.profileInfo, { backgroundColor: colors.background }]}
       onPress={onPress}
     >
       <Image
-        source={image}
+       source={typeof profileImage === "string" ? { uri: profileImage } : profileImage}
         style={[styles.profileImage, style]}
       />
       <View>
