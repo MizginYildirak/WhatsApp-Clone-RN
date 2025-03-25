@@ -3,7 +3,16 @@ import { View } from "react-native";
 import { Menu } from "react-native-paper";
 import IconButton from "../UI/IconButton";
 
-export default function ThreeDotsMenu({ menuItems }) {
+interface MenuItem {
+  title: string;
+  onPress: () => void;
+}
+
+interface ThreeDotsMenuProps {
+  menuItems: MenuItem[];
+}
+
+export default function ThreeDotsMenu({ menuItems }: ThreeDotsMenuProps) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   return (

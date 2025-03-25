@@ -1,10 +1,24 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import IconButton from "../UI/IconButton";
+import { StyleSheet, Text, View, TouchableOpacity, ViewStyle } from "react-native";
+import ViewButton from "../UI/IconButton";
 import { useThemeColors } from "../hooks/useThemeColors.js";
 
-export const SettingsSectionItem = ({ title, description, onPress, icon, style }) => {
-  const colors = useThemeColors()
+interface SettingsSectionItemProps {
+  title: string;
+  description: string;
+  onPress: () => void;
+  icon: string;
+  style?: ViewStyle;
+}
+
+const SettingsSectionItem = ({
+  title,
+  description,
+  onPress,
+  icon,
+  style
+}: SettingsSectionItemProps) => {
+  const colors = useThemeColors();
 
   return (
     <TouchableOpacity onPress={onPress} style={[styles.sectionItem, style, { backgroundColor: colors.background }]}>
@@ -34,3 +48,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
+
+export default SettingsSectionItem;
