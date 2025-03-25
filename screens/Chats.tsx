@@ -65,6 +65,8 @@ export default function Chats() {
 
   useEffect(() => {
     messages.forEach((msg) => {
+
+      console.log("msgtype:", msg)
       const chatId = msg.chatId;
       const lastMsg = lastMessages[chatId];
 

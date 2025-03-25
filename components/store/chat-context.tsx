@@ -17,7 +17,8 @@ interface Message {
 
 interface ChatContextType {
   messages: Message[];
-  receiveMessage: (text: string) => void;
+  receiveMessage: (chatId: string, text: string) => void;
+  mainUser: number; 
 }
 
 interface ChatProviderProps {

@@ -47,6 +47,7 @@
     "@babel/core": "^7.25.2",
     "@react-native-community/cli": "^18.0.0",
     "@types/react": "~18.3.12",
+    "@types/react-native-vector-icons": "^6.4.18",
     "react-devtools": "^6.1.1",
     "typescript": "^5.3.3"
   },

@@ -16,19 +16,26 @@ import uuid from "react-native-uuid";
 import IconButton from "../components/UI/IconButton";
 import { useChat } from "../components/store/chat-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
+import { RouteProp } from "@react-navigation/native";
+
+interface ChatScreenParams {
+  name: string;
+  image: string;
+  user_id: string;
+}
 
 interface ChatScreenProps {
-  route: { params: { name: string; image: string; user_id: string } };
+  route: RouteProp<{ ChatScreen: ChatScreenParams }, "ChatScreen">;
   navigation: any;
 }
 
-const ChatScreen = ({ route, navigation }) => {
+const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   const [messageText, setMessageText] = useState("");
   const { name, image, user_id } = route.params;
 
   const { messages, receiveMessage, mainUser } = useChat();
 
-  const wsRef = useRef(null);
+  const wsRef = useRef<WebSocket | null>(null);
   const colors = useThemeColors();
 
   const styles = StyleSheet.create({
@@ -126,7 +133,7 @@ const ChatScreen = ({ route, navigation }) => {
       fontSize: 18,
       fontWeight: "bold",
     },
-  });  
+  });
 
   useEffect(() => {
     navigation.setOptions({
@@ -147,7 +154,7 @@ const ChatScreen = ({ route, navigation }) => {
   }, [navigation, name, image]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.1.108:3000");
+    const socket = new WebSocket("ws://192.168.1.104:3000");
     wsRef.current = socket;
 
     socket.onopen = () => console.log("Connected to the server!");
@@ -268,6 +275,5 @@ const ChatScreen = ({ route, navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
 
 export default ChatScreen;
