@@ -14,7 +14,11 @@ export default function ProfileInfo({ name, status, image, onPress, style }) {
       onPress={onPress}
     >
       <Image
-       source={typeof profileImage === "string" ? { uri: profileImage } : profileImage}
+        source={
+          typeof profileImage === "string"
+            ? { uri: profileImage }
+            : profileImage
+        }
         style={[styles.profileImage, style]}
       />
       <View>

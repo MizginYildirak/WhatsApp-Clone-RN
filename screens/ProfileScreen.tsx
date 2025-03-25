@@ -5,10 +5,26 @@ import ProfileInfo from "../components/ProfileInfo";
 import { SettingsSectionItem } from "../components/utils/Settings";
 import * as ImagePicker from "expo-image-picker";
 import { useProfile } from "../components/store/profile-context";
+import * as MediaLibrary from 'expo-media-library';
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
   const { profileImage, setProfileImage } = useProfile();
+  const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const requestPermissions = async () => {
+    if (status !== 'granted') {
+      const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync();
+      if (mediaStatus === 'granted') {
+        console.log('Permission granted!');
+        pickImage(); 
+      } else {
+        console.log('Permission denied!');
+      }
+    } else {
+      pickImage(); 
+    }
+  };
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -44,7 +60,7 @@ export default function ProfileScreen() {
       <ProfileInfo
         image={profileImage}
         style={{ height: 200, width: 200, borderRadius: 100 }}
-        onPress={pickImage}
+        onPress={requestPermissions} // Trigger permission request and image picker
       />
 
       {profileData.map((data, index) => (
