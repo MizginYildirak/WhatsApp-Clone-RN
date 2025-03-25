@@ -7,27 +7,33 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { useThemeColors } from "../components/hooks/useThemeColors.js";
+import { useThemeColors } from "../components/hooks/useThemeColors";
 import ProfileInfo from "../components/ProfileInfo";
 import { SettingsSectionItem } from "../components/utils/Settings";
 import * as ImagePicker from "expo-image-picker";
 import { useProfile } from "../components/store/profile-context";
 import * as MediaLibrary from "expo-media-library";
 
+interface ProfileItem {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export default function ProfileScreen() {
   const colors = useThemeColors();
   const { profileImage, setProfileImage } = useProfile();
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedField, setSelectedField] = useState("");
-  const [tempInput, setTempInput] = useState("");
-  const [inputs, setInputs] = useState({
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [selectedField, setSelectedField] = useState<string>("");
+  const [tempInput, setTempInput] = useState<string>("");
+  const [inputs, setInputs] = useState<{ name: string; status: string }>({
     name: "Magnus Carlsen",
     status: "Mozart of Chess",
   });
 
   const requestPermissions = async () => {
-    if (status !== "granted") {
+    if (status?.granted !== true) {
       const { status: mediaStatus } =
         await MediaLibrary.requestPermissionsAsync();
       if (mediaStatus === "granted") {
@@ -43,20 +49,18 @@ export default function ProfileScreen() {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
-    console.log("result", result);
-
-    if (!result.canceled) {
+    if (!result.canceled && result.assets.length > 0) {
       setProfileImage(result.assets[0].uri);
     }
   };
 
-  const profileData = [
+  const profileData: ProfileItem[] = [
     {
       icon: "account-circle-outline",
       title: "Name",
@@ -70,7 +74,7 @@ export default function ProfileScreen() {
     { icon: "phone", title: "Phone", description: "+1234567890" },
   ];
 
-  const openModal = (field) => {
+  const openModal = (field: string) => {
     setSelectedField(field);
     setTempInput(inputs[field === "Name" ? "name" : "status"]);
     setModalVisible(true);
@@ -194,5 +198,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-export default ProfileScreen;
