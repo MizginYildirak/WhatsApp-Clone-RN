@@ -264,8 +264,8 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
             style={styles.sendButton}
             onPress={sendMessageToServer}
           >
-            <Ionicons
-              name={messageText ? "send" : "mic"}
+            <IconButton
+              name={messageText ? "send" : "microphone"}
               size={24}
               color={colors.text}
             />

@@ -1,19 +1,30 @@
-import { StyleSheet, View, Pressable, ViewStyle } from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { View, Pressable, ViewStyle, StyleProp, TextStyle } from "react-native";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface IconButtonProps {
   name: string;
   color?: string;
   size?: number;
   onPress?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<TextStyle>;
 }
 
 const IconButton = ({ name, color, size, onPress, style }: IconButtonProps) => {
+  const MaterialCommunity =
+    MaterialCommunityIcons as unknown as React.ElementType;
+
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
+    >
       <View>
-        <Icon name={name} color={color} size={size} style={style} />
+        <MaterialCommunity
+          name={name}
+          color={color}
+          size={size}
+          style={style}
+        />
       </View>
     </Pressable>
   );

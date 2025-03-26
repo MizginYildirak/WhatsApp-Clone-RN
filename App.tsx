@@ -21,7 +21,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 
 import { Provider as PaperProvider } from "react-native-paper";
 
-import { camera, Search, MoreVertical } from "react-native-feather";
+import { Camera, Search, MoreVertical } from "react-native-feather";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import IconButton from "./components/UI/IconButton";
 
@@ -44,7 +44,7 @@ function BottomTabNavigator() {
           backgroundColor: colors.background,
         },
         tabBarIcon: ({ color, size, focused }) => {
-          let iconName;
+          let iconName: string = "";
 
           if (route.name === "Chats") {
             iconName = "message-text";
@@ -70,7 +70,7 @@ function BottomTabNavigator() {
               }}
             >
               
-              <Icon
+              <IconButton
                 name={iconName}
                 color={focused ? "#2b9b60" : color}
                 size={27}

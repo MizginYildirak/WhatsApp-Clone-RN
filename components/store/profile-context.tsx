@@ -5,7 +5,6 @@ interface ProfileContextType {
   profileImage: ImageSourcePropType;
   setProfileImage: (image: ImageSourcePropType) => void;
 }
-
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
 export const ProfileContextProvider = ({
@@ -16,6 +15,7 @@ export const ProfileContextProvider = ({
   const [profileImage, setProfileImage] = useState<ImageSourcePropType>(
     require("../../colorfulflowers.jpg")
   );
+  
 
   return (
     <ProfileContext.Provider value={{ profileImage, setProfileImage }}>

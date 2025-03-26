@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, ViewStyle } from "react-native";
-import ViewButton from "../UI/IconButton";
+import IconButton from "../UI/IconButton";
 import { useThemeColors } from "../hooks/useThemeColors.js";
 
 interface SettingsSectionItemProps {

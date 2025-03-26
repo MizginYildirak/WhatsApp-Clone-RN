@@ -1,5 +1,5 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { SettingsSectionItem } from "../components/utils/Settings";
+import  SettingsSectionItem  from "../components/utils/Settings";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { useProfile } from "../components/store/profile-context";
@@ -9,6 +9,9 @@ export default function SettingsScreen() {
   const navigation = useNavigation();
   const colors = useThemeColors();
   const { profileImage } = useProfile();
+
+  console.log("profileImage:", profileImage); // Eğer profile undefined ise burada hata alırsın!
+  
 
   const settings = [
     {

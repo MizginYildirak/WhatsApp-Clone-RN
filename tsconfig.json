@@ -4,6 +4,7 @@
     "strict": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "skipLibCheck": true,
   }
 }
