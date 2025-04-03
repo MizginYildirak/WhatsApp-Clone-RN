@@ -12,7 +12,7 @@ import { useTheme } from "../components/store/theme-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 
 export default function ThemeScreen() {
-  const { isDarkMode, setIsDarkMode } = useTheme();
+  const { isDarkMode, setIsDarkMode } = useTheme()!;
   const colors = useThemeColors();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedTheme, setSelectedTheme] = useState<string>("Light");

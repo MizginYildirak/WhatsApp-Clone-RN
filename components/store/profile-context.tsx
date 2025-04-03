@@ -2,8 +2,8 @@ import { createContext, useState, useContext, ReactNode } from "react";
 import { ImageSourcePropType } from "react-native";
 
 interface ProfileContextType {
-  profileImage: ImageSourcePropType;
-  setProfileImage: (image: ImageSourcePropType) => void;
+  profileImage: ImageSourcePropType ;
+  setProfileImage: (image: ImageSourcePropType ) => void;
 }
 const ProfileContext = createContext<ProfileContextType | undefined>(undefined);
 
@@ -12,7 +12,7 @@ export const ProfileContextProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const [profileImage, setProfileImage] = useState<ImageSourcePropType>(
+  const [profileImage, setProfileImage] = useState<ImageSourcePropType >(
     require("../../colorfulflowers.jpg")
   );
   

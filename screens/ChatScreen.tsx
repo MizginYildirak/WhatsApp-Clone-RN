@@ -33,7 +33,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   const [messageText, setMessageText] = useState("");
   const { name, image, user_id } = route.params;
 
-  const { messages, receiveMessage, mainUser } = useChat();
+  const { messages, receiveMessage, mainUser } = useChat()!;
 
   const wsRef = useRef<WebSocket | null>(null);
   const colors = useThemeColors();

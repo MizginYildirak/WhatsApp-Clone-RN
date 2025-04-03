@@ -1,10 +1,26 @@
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageSourcePropType,
+  GestureResponderEvent
+} from "react-native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { useProfile } from "../components/store/profile-context";
 
-export default function ProfileInfo({ name, status, image, onPress, style }) {
+interface ProfileInfoProps {
+  name?: string;
+  status?: string;
+  image?: ImageSourcePropType; 
+  onPress?: (event: GestureResponderEvent) => void;
+  style?: any;
+}
+
+export default function ProfileInfo({ name, status, image, onPress, style }: ProfileInfoProps) {
   const colors = useThemeColors();
-  const { profileImage } = useProfile();
+  const profileImage = useProfile()?.profileImage;
 
   console.log("Profile Image:", profileImage);
 

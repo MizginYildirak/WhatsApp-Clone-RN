@@ -7,12 +7,13 @@ import React, {
 } from "react";
 import uuid from "react-native-uuid";
 
-interface Message {
+export interface Message {
   _id: string;
   user: { _id: number; name: string };
   text: string;
-  to: string;
-  time: { hour: number; minute: number };
+  to?: string;
+  time: { hour: string; minute: string };
+  chatId?: string;
 }
 
 interface ChatContextType {

@@ -22,7 +22,7 @@ interface ProfileItem {
 
 export default function ProfileScreen() {
   const colors = useThemeColors();
-  const { profileImage, setProfileImage } = useProfile();
+  const { profileImage, setProfileImage } = useProfile()!;
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedField, setSelectedField] = useState<string>("");
@@ -56,7 +56,7 @@ export default function ProfileScreen() {
     });
 
     if (!result.canceled && result.assets.length > 0) {
-      setProfileImage(result.assets[0].uri);
+      setProfileImage({ uri: result.assets[0].uri });
     }
   };
 

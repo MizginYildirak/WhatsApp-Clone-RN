@@ -8,9 +8,9 @@ import ProfileInfo from "../components/ProfileInfo";
 export default function SettingsScreen() {
   const navigation = useNavigation();
   const colors = useThemeColors();
-  const { profileImage } = useProfile();
+  const profileImage = useProfile()?.profileImage;
 
-  console.log("profileImage:", profileImage); // Eğer profile undefined ise burada hata alırsın!
+  console.log("profileImage:", profileImage); 
   
 
   const settings = [
@@ -53,9 +53,18 @@ export default function SettingsScreen() {
     { icon: "help", title: "Help", description: "" },
   ];
 
-  const screenMapping = {
+  const screenMapping: { [key: string]: string } = {
     Chats: "ThemeScreen",
+    Account: "AccountScreen",
+    Privacy: "PrivacyScreen",
+    Avatar: "AvatarScreen",
+    Lists: "ListsScreen",
+    Notifications: "NotificationsScreen",
+    "Storage and Data": "StorageScreen",
+    "App Language": "LanguageScreen",
+    Help: "HelpScreen",
   };
+  
 
   const openProfileInfo = () => {
     navigation.navigate("Profile");
