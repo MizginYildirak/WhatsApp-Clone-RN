@@ -10,9 +10,13 @@ import {
 import { useState, useEffect } from "react";
 import uuid from "react-native-uuid";
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
 import { useChat } from "../components/store/chat-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { Message } from "../components/store/chat-context";
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface ChatItem {
   user_id: string;
@@ -36,7 +40,7 @@ const Dummy_Data: ChatItem[] = [
 ];
 
 export default function Chats() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const colors = useThemeColors();
 
   const { messages, receiveMessage, mainUser } = useChat()!;

@@ -1,17 +1,20 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import  SettingsSectionItem  from "../components/utils/Settings";
+import SettingsSectionItem from "../components/utils/Settings";
 import { useNavigation } from "@react-navigation/native";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { useProfile } from "../components/store/profile-context";
 import ProfileInfo from "../components/ProfileInfo";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function SettingsScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const colors = useThemeColors();
   const profileImage = useProfile()?.profileImage;
 
-  console.log("profileImage:", profileImage); 
-  
+  console.log("profileImage:", profileImage);
 
   const settings = [
     {
@@ -64,7 +67,6 @@ export default function SettingsScreen() {
     "App Language": "LanguageScreen",
     Help: "HelpScreen",
   };
-  
 
   const openProfileInfo = () => {
     navigation.navigate("Profile");
@@ -88,7 +90,7 @@ export default function SettingsScreen() {
           onPress={() => {
             const screenName = screenMapping[setting.title];
             if (screenName) {
-              navigation.navigate(screenName);
+              navigation.navigate(screenName as keyof RootStackParamList);
             }
           }}
         />

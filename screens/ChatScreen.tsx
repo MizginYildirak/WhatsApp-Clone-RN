@@ -17,6 +17,8 @@ import IconButton from "../components/UI/IconButton";
 import { useChat } from "../components/store/chat-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../App";
 
 interface ChatScreenParams {
   name: string;
@@ -24,10 +26,15 @@ interface ChatScreenParams {
   user_id: string;
 }
 
-interface ChatScreenProps {
-  route: RouteProp<{ ChatScreen: ChatScreenParams }, "ChatScreen">;
-  navigation: any;
-}
+type ChatScreenRouteProp = RouteProp<RootStackParamList, "ChatScreen">;
+
+type ChatScreenNavigationProp = StackNavigationProp<RootStackParamList, "ChatScreen">;
+
+type ChatScreenProps = {
+  route: ChatScreenRouteProp;
+  navigation: ChatScreenNavigationProp;
+};
+
 
 const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   const [messageText, setMessageText] = useState("");

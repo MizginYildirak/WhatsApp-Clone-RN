@@ -1,7 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Animated, Easing } from "react-native";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationProp,
+} from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import { ChatContextProvider } from "./components/store/chat-context";
@@ -25,13 +28,21 @@ import { Camera, Search, MoreVertical } from "react-native-feather";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import IconButton from "./components/UI/IconButton";
 
+type NavigationProps = StackNavigationProp<RootStackParamList>;
+
+export type RootStackParamList = {
+  Profile: undefined;
+  ChatScreen: { user_id: string; name: string; image: string };
+  Settings: undefined;
+};
+
 const BottomTabs = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   const colors = useThemeColors();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>(); 
 
-  console.log("colors:", colors)
+  console.log("colors:", colors);
 
   return (
     <BottomTabs.Navigator
@@ -69,7 +80,6 @@ function BottomTabNavigator() {
                 marginBottom: 10,
               }}
             >
-              
               <IconButton
                 name={iconName}
                 color={focused ? "#2b9b60" : color}
