@@ -161,7 +161,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   }, [navigation, name, image]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.1.104:3000");
+    const socket = new WebSocket("ws://192.168.1.101:3000");
     wsRef.current = socket;
 
     socket.onopen = () => console.log("Connected to the server!");

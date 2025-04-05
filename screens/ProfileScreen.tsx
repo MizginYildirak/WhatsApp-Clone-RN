@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useThemeColors } from "../components/hooks/useThemeColors";
 import ProfileInfo from "../components/ProfileInfo";
-import { SettingsSectionItem } from "../components/utils/Settings";
+import SettingsSectionItem from "../components/utils/Settings";
 import * as ImagePicker from "expo-image-picker";
 import { useProfile } from "../components/store/profile-context";
 import * as MediaLibrary from "expo-media-library";

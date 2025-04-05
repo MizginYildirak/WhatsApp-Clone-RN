@@ -15,7 +15,7 @@
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/native-stack": "^7.3.8",
     "@react-navigation/stack": "^7.1.2",
-    "expo": "^52.0.40",
+    "expo": "^52.0.44",
     "expo-image-picker": "^16.0.6",
     "expo-media-library": "^17.0.6",
     "expo-status-bar": "~2.0.1",
@@ -47,10 +47,11 @@
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@react-native-community/cli": "^18.0.0",
-    "@types/react": "~18.3.12",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
     "@types/react-native-vector-icons": "^6.4.18",
     "react-devtools": "^6.1.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.2"
   },
   "private": true
 }

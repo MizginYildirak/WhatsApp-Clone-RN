@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { SettingsSectionItem } from "../components/utils/Settings";
+import SettingsSectionItem from "../components/utils/Settings";
 import { useTheme } from "../components/store/theme-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 

@@ -6,7 +6,7 @@ import { useThemeColors } from "../hooks/useThemeColors.js";
 interface SettingsSectionItemProps {
   title: string;
   description: string;
-  onPress: () => void;
+  onPress?: () => void;
   icon: string;
   style?: ViewStyle;
 }
