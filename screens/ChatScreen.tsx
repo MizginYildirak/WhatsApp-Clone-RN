@@ -19,6 +19,7 @@ import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
+import * as ImagePicker from "expo-image-picker";
 
 interface ChatScreenParams {
   name: string;
@@ -28,22 +29,43 @@ interface ChatScreenParams {
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "ChatScreen">;
 
-type ChatScreenNavigationProp = StackNavigationProp<RootStackParamList, "ChatScreen">;
+type ChatScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "ChatScreen"
+>;
 
 type ChatScreenProps = {
   route: ChatScreenRouteProp;
   navigation: ChatScreenNavigationProp;
 };
 
-
 const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   const [messageText, setMessageText] = useState("");
+  const [imageUri, setImageUri] = useState("");
+
   const { name, image, user_id } = route.params;
 
   const { messages, receiveMessage, mainUser } = useChat()!;
 
   const wsRef = useRef<WebSocket | null>(null);
   const colors = useThemeColors();
+
+  const takePhoto = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Camera permission is needed");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
   const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background, paddingTop: 20 },
@@ -169,7 +191,11 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
     socket.onmessage = (event) => {
       try {
         const receivedData = JSON.parse(event.data);
-        receiveMessage(user_id, receivedData.text);
+        receiveMessage(
+          user_id,
+          receivedData.text,
+          receivedData.messageImg || ""
+        );
       } catch (error) {
         console.error("Error parsing received message:", error);
       }
@@ -187,9 +213,10 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
   }, []);
 
   const sendMessageToServer = () => {
-    if (messageText.trim() && wsRef.current) {
+    if ((messageText.trim() || imageUri) && wsRef.current) {
       const newMessage = {
         _id: uuid.v4(),
+        messageImg: imageUri,
         user: { _id: mainUser, name: "me" },
         text: messageText,
         chatId: user_id,
@@ -199,6 +226,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
 
       wsRef.current.send(JSON.stringify(newMessage));
       setMessageText("");
+      setImageUri("");
     }
   };
 
@@ -230,6 +258,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
                   : styles.receivedMessage,
               ]}
             >
+              {item.messageImg ? (
+                <Image
+                  source={{ uri: item.messageImg }}
+                  style={{ width: 150, height: 150, borderRadius: 10 }}
+                />
+              ) : null}
               <Text style={styles.messageText}>{`${item.text}`}</Text>
               <Text
                 style={styles.hourText}
@@ -262,7 +296,7 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
                 name="camera-outline"
                 size={30}
                 color={colors.text}
-                onPress={() => console.log("Fotoğraf ekleme açıldı!")}
+                onPress={takePhoto}
               />
             </View>
           </View>

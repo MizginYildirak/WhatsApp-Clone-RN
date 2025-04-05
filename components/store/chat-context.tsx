@@ -9,6 +9,7 @@ import uuid from "react-native-uuid";
 
 export interface Message {
   _id: string;
+  messageImg: string;
   user: { _id: number; name: string };
   text: string;
   to?: string;
@@ -18,7 +19,7 @@ export interface Message {
 
 interface ChatContextType {
   messages: Message[];
-  receiveMessage: (chatId: string, text: string) => void;
+  receiveMessage: (chatId: string, text: string, messageImg: string) => void;
   mainUser: number; 
 }
 
@@ -37,13 +38,14 @@ export const ChatContextProvider: React.FC<ChatProviderProps> = ({
   const [messages, setMessages] = useState<Message[]>([]);
   const [mainUser] = useState<number>(() => Math.floor(Math.random() * 1000));
  
-  const receiveMessage = (chatId: string, text: string) => {
+  const receiveMessage = (chatId: string, text: string, messageImg: string = "") => {
     const date = new Date();
     const currentHour = String(date.getHours()).padStart(2, "0");
     const currentMinute = String(date.getMinutes()).padStart(2, "0");
 
     const newMessage: Message = {
       _id: uuid.v4() as string,
+      messageImg: messageImg,
       user: { _id: mainUser, name: "me" },
       text,
       time: { hour: currentHour, minute: currentMinute },
