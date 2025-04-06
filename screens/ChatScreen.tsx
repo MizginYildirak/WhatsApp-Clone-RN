@@ -16,7 +16,7 @@ import uuid from "react-native-uuid";
 import IconButton from "../components/UI/IconButton";
 import { useChat } from "../components/store/chat-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../App";
 import * as ImagePicker from "expo-image-picker";
@@ -34,19 +34,14 @@ type ChatScreenNavigationProp = StackNavigationProp<
   "ChatScreen"
 >;
 
-type ChatScreenProps = {
-  route: ChatScreenRouteProp;
-  navigation: ChatScreenNavigationProp;
-};
-
-const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
+const ChatScreen = () => {
   const [messageText, setMessageText] = useState("");
   const [imageUri, setImageUri] = useState("");
-
+  const navigation = useNavigation<ChatScreenNavigationProp>();
+  const route = useRoute<ChatScreenRouteProp>();
   const { name, image, user_id } = route.params;
 
   const { messages, receiveMessage, mainUser } = useChat()!;
-
   const wsRef = useRef<WebSocket | null>(null);
   const colors = useThemeColors();
 
@@ -222,16 +217,11 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
         chatId: user_id,
       };
 
-      console.log("newMessageUserid;", newMessage.user);
-
       wsRef.current.send(JSON.stringify(newMessage));
       setMessageText("");
       setImageUri("");
     }
   };
-
-  console.log("messajlar:", messages);
-  console.log("Main User2: ", mainUser);
 
   const filteredChatMessages = messages.filter(
     (message) => message.chatId === user_id
@@ -264,10 +254,12 @@ const ChatScreen: React.FC<ChatScreenProps> = ({ route, navigation }) => {
                   style={{ width: 150, height: 150, borderRadius: 10 }}
                 />
               ) : null}
-              <Text style={styles.messageText}>{`${item.text}`}</Text>
-              <Text
-                style={styles.hourText}
-              >{`${item.time.hour}:${item.time.minute}`}</Text>
+              <Text style={styles.messageText}>{item.text}</Text>
+              {item.time && (
+                <Text style={styles.hourText}>
+                  {`${item.time.hour}:${item.time.minute}`}
+                </Text>
+              )}
             </View>
           )}
           keyExtractor={(item) => item._id.toString()}
