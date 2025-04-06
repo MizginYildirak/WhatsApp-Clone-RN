@@ -251,7 +251,7 @@ function RootNavigator() {
           <ChatContextProvider>
             <NavigationContainer>
               <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Home" component={ChatStack} />
+                <Stack.Screen name="HomeScreen" component={ChatStack} />
                 <Stack.Screen
                   name="ChatScreen"
                   component={ChatScreen}

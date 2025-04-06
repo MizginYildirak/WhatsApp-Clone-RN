@@ -34,7 +34,6 @@ export const ChatContext = createContext<ChatContextType | undefined>(
 export const ChatContextProvider: React.FC<ChatProviderProps> = ({
   children,
 }) => {
-  const [messagesByChat, setMessagesByChat] = useState<{ [chatId: string]: Message[] }>({});
   const [messages, setMessages] = useState<Message[]>([]);
   const [mainUser] = useState<number>(() => Math.floor(Math.random() * 1000));
  
