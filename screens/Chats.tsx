@@ -39,6 +39,10 @@ const Dummy_Data: ChatItem[] = [
   },
 ];
 
+function isMessage(msg: string | Message): msg is Message {
+  return (msg as Message) !== undefined;
+}
+
 export default function Chats() {
   const navigation = useNavigation<NavigationProp>();
   const colors = useThemeColors();
@@ -58,9 +62,13 @@ export default function Chats() {
     },
     chatItem: {
       flexDirection: "row",
+      justifyContent: "space-between",
       padding: 10,
       alignItems: "center",
       backgroundColor: colors.background,
+    },
+    profileItem: {
+      flexDirection: "row",
     },
     image: {
       width: 50,
@@ -82,7 +90,7 @@ export default function Chats() {
 
       console.log("lastMsg:", lastMessages);
 
-      if (lastMsg && typeof lastMsg !== "string") {
+      if (lastMsg && isMessage(lastMsg)) {
         if (
           msg.time.hour > lastMsg.time.hour ||
           (msg.time.hour === lastMsg.time.hour &&
@@ -113,20 +121,30 @@ export default function Chats() {
 
     const lastMessage = lastMessages[item.user_id];
 
+    console.log("lastttttttmessageeeeee:", lastMessage);
+
     return (
       <TouchableOpacity onPress={openChat} style={styles.chatItem}>
-        <Image source={{ uri: item.image }} style={styles.image} />
-        <View>
-          <Text style={styles.name}>{item.name}</Text>
-          <Text style={styles.name}>
-            {typeof lastMessage === "string"
-              ? lastMessage
-              : lastMessage?.text || "Henüz mesaj yok"}
-          </Text>
+        <View style={styles.profileItem}>
+          <Image source={{ uri: item.image }} style={styles.image} />
+          <View>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.name}>
+              {typeof lastMessage === "string"
+                ? lastMessage
+                : lastMessage?.text || "Henüz mesaj yok"}
+            </Text>
+          </View>
         </View>
+        {isMessage(lastMessage) && (
+          <View>
+            <Text>{`${lastMessage.time.hour}:${lastMessage.time.minute}`}</Text>
+          </View>
+        )}
       </TouchableOpacity>
     );
   }
+
   return (
     <FlatList
       data={Dummy_Data}

@@ -52,6 +52,8 @@ const ChatScreen = () => {
       return;
     }
 
+    console.log("imageuri:", imageUri);
+
     const result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
@@ -184,6 +186,8 @@ const ChatScreen = () => {
     socket.onopen = () => console.log("Connected to the server!");
 
     socket.onmessage = (event) => {
+      console.log("Gelen veri:", event.data);
+
       try {
         const receivedData = JSON.parse(event.data);
         receiveMessage(
@@ -216,6 +220,8 @@ const ChatScreen = () => {
         text: messageText,
         chatId: user_id,
       };
+
+      console.log("Sending message:", newMessage);
 
       wsRef.current.send(JSON.stringify(newMessage));
       setMessageText("");
@@ -251,7 +257,7 @@ const ChatScreen = () => {
               {item.messageImg ? (
                 <Image
                   source={{ uri: item.messageImg }}
-                  style={{ width: 150, height: 150, borderRadius: 10 }}
+                  style={{ width: 50, height: 50, borderRadius: 10 }}
                 />
               ) : null}
               <Text style={styles.messageText}>{item.text}</Text>
