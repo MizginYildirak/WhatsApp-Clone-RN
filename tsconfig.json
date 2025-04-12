@@ -15,7 +15,8 @@
       "@api/*": ["./api/*"],
       "@utils/*": ["./components/utils/*"],
       "@store/*": ["./components/store/*"],
-      "@ui/*": ["./components/UI/*"]
+      "@ui/*": ["./components/UI/*"],
+      "@navigators/*": ["./navigators/*"]
     }
   }
 }

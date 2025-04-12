@@ -11,8 +11,8 @@ interface MenuItem {
 interface CustomHeaderRightProps {
   menuItems: MenuItem[];
   children?: React.ReactNode;
-  withSearch?: boolean;
   withCamera?: boolean;
+  withSearch?: boolean;
 }
 
 const CustomHeaderRight: React.FC<CustomHeaderRightProps> = ({
@@ -41,4 +41,4 @@ const CustomHeaderRight: React.FC<CustomHeaderRightProps> = ({
   );
 };
 
-export default CustomHeaderRight
+export default CustomHeaderRight;

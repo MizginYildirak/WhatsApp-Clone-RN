@@ -12,5 +12,6 @@ export { default as IconButton } from "@ui/IconButton";
 
 export { default as ThreeDotsMenu } from "@utils/ThreeDotsMenu";
 export { default as CustomHeaderRight } from "@components/navigation/custom-header-right";
+export { default as BottomTabNavigator } from "@navigators/BottomTabsNavigator";
 
 export { useThemeColors } from "@hooks/useThemeColors";
