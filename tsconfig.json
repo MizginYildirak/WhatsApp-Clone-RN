@@ -6,5 +6,16 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "skipLibCheck": true,
+    "baseUrl" : ".",
+    "paths": {
+      "@components/*": ["./components/*"],
+      "@screens/*": ["./screens/*"],
+      "@pages/*": ["./pages/*"],
+      "@hooks/*": ["./components/hooks/*"],
+      "@api/*": ["./api/*"],
+      "@utils/*": ["./components/utils/*"],
+      "@store/*": ["./components/store/*"],
+      "@ui/*": ["./components/UI/*"]
+    }
   }
 }

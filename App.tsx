@@ -7,26 +7,30 @@ import {
 } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { ChatContextProvider } from "./components/store/chat-context";
-import { ThemeContextProvider } from "./components/store/theme-context";
-import { ProfileContextProvider } from "./components/store/profile-context";
-import { useThemeColors } from "./components/hooks/useThemeColors.js";
+import {
+  ChatContextProvider,
+  ThemeContextProvider,
+  ProfileContextProvider,
+} from "./routes/context";
 
-import Chats from "./screens/Chats";
-import Updates from "./screens/Updates";
-import Groups from "./screens/Groups";
-import Calls from "./screens/Calls";
-import ChatScreen from "./screens/ChatScreen";
-import ThreeDotsMenu from "./components/utils/ThreeDotsMenu";
-import SettingsScreen from "./screens/SettingsScreen";
-import ThemeScreen from "./screens/ThemeScreen";
-import ProfileScreen from "./screens/ProfileScreen";
+import {
+  Chats,
+  Updates,
+  Groups,
+  Calls,
+  ChatScreen,
+  SettingsScreen,
+  ThemeScreen,
+  ProfileScreen,
+  ThreeDotsMenu,
+  useThemeColors,
+  IconButton
+} from "./routes/index";
 
 import { Provider as PaperProvider } from "react-native-paper";
 
 import { Camera, Search, MoreVertical } from "react-native-feather";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import IconButton from "./components/UI/IconButton";
 
 type NavigationProps = StackNavigationProp<RootStackParamList>;
 
@@ -40,7 +44,7 @@ const BottomTabs = createBottomTabNavigator();
 
 function BottomTabNavigator() {
   const colors = useThemeColors();
-  const navigation = useNavigation<NavigationProps>(); 
+  const navigation = useNavigation<NavigationProps>();
 
   console.log("colors:", colors);
 
