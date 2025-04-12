@@ -24,7 +24,8 @@ import {
   ProfileScreen,
   ThreeDotsMenu,
   useThemeColors,
-  IconButton
+  IconButton,
+  CustomHeaderRight,
 } from "./routes/index";
 
 import { Provider as PaperProvider } from "react-native-paper";
@@ -134,21 +135,11 @@ function BottomTabNavigator() {
               },
             ];
             return (
-              <View
-                style={{
-                  flexDirection: "row",
-                  gap: 25,
-                  marginRight: 25,
-                }}
-              >
-                <IconButton
-                  name="camera-outline"
-                  size={25}
-                  color={colors.text}
-                />
-                <IconButton name="magnify" size={25} color={colors.text} />
-                <ThreeDotsMenu menuItems={menuItems} />
-              </View>
+              <CustomHeaderRight
+                menuItems={menuItems}
+                withCamera={true}
+                withSearch={true}
+              />
             );
           },
         }}
@@ -176,10 +167,7 @@ function BottomTabNavigator() {
               },
             ];
             return (
-              <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color={colors.text} />
-                <ThreeDotsMenu menuItems={menuItems} />
-              </View>
+              <CustomHeaderRight menuItems={menuItems} withSearch={true} />
             );
           },
         }}
@@ -198,11 +186,7 @@ function BottomTabNavigator() {
                 onPress: () => console.log("Option 1 is pressed"),
               },
             ];
-            return (
-              <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <ThreeDotsMenu menuItems={menuItems} />
-              </View>
-            );
+            return <CustomHeaderRight menuItems={menuItems} />;
           },
         }}
       />
@@ -225,10 +209,7 @@ function BottomTabNavigator() {
               },
             ];
             return (
-              <View style={{ marginRight: 15, flexDirection: "row", gap: 25 }}>
-                <IconButton name="magnify" size={25} color={colors.text} />
-                <ThreeDotsMenu menuItems={menuItems} />
-              </View>
+              <CustomHeaderRight menuItems={menuItems} withSearch={true} />
             );
           },
         }}
