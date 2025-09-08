@@ -1,0 +1,83 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach to Expo",
+      "request": "attach",
+      "type": "reactnative",
+      "cwd": "${workspaceRoot}",
+      "platform": "expo",
+      "port": 19000,
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Android",
+      "request": "launch",
+      "type": "reactnative",
+      "cwd": "${workspaceRoot}",
+      "platform": "android",
+      "packageName": "com.yourappname", // Kendi app adınızla değiştirin
+      "enableDebug": true,
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "runArguments": [
+        "--packager-port",
+        "19000",
+        "--no-packager"
+      ]
+    },
+    {
+      "name": "Debug iOS",
+      "request": "launch",
+      "type": "reactnative",
+      "cwd": "${workspaceRoot}",
+      "platform": "ios",
+      "target": "simulator",
+      "port": 19000,
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug in Exponent",
+      "request": "launch",
+      "type": "reactnative",
+      "cwd": "${workspaceRoot}",
+      "platform": "exponent",
+      "expoHostType": "local",
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    },
+    {
+      "name": "Debug Production Android",
+      "request": "launch",
+      "type": "reactnative",
+      "cwd": "${workspaceRoot}",
+      "platform": "android",
+      "variant": "release",
+      "enableDebug": true,
+      "sourceMaps": true,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Android + Expo",
+      "configurations": ["Attach to Expo", "Debug Android"]
+    },
+    {
+      "name": "Debug iOS + Expo",
+      "configurations": ["Attach to Expo", "Debug iOS"]
+    }
+  ]
+}

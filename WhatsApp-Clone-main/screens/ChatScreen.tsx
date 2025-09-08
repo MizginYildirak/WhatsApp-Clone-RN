@@ -18,7 +18,7 @@ import { useChat } from "../components/store/chat-context";
 import { useThemeColors } from "../components/hooks/useThemeColors.js";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../App";
+import { RootStackParamList } from "../navigators/BottomTabsNavigator";
 import * as ImagePicker from "expo-image-picker";
 
 interface ChatScreenParams {
@@ -37,6 +37,7 @@ type ChatScreenNavigationProp = StackNavigationProp<
 const ChatScreen = () => {
   const [messageText, setMessageText] = useState("");
   const [imageUri, setImageUri] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const navigation = useNavigation<ChatScreenNavigationProp>();
   const route = useRoute<ChatScreenRouteProp>();
   const { name, image, user_id } = route.params;
@@ -180,52 +181,76 @@ const ChatScreen = () => {
   }, [navigation, name, image]);
 
   useEffect(() => {
-    const socket = new WebSocket("ws://192.168.1.101:3000");
-    wsRef.current = socket;
+    const connectWebSocket = () => {
+      const socket = new WebSocket("ws://10.8.0.11:3000");
+      wsRef.current = socket;
 
-    socket.onopen = () => console.log("Connected to the server!");
+      socket.onopen = () => {
+        console.log("Connected to the server!");
+        setIsSending(false);
+      };
 
-    socket.onmessage = (event) => {
-      console.log("Gelen veri:", event.data);
+      socket.onmessage = (event) => {
+        console.log("Gelen veri:", event.data);
 
-      try {
-        const receivedData = JSON.parse(event.data);
-        receiveMessage(
-          user_id,
-          receivedData.text,
-          receivedData.messageImg || ""
-        );
-      } catch (error) {
-        console.error("Error parsing received message:", error);
-      }
+        try {
+          const receivedData = JSON.parse(event.data);
+          receiveMessage(
+            user_id,
+            receivedData.text,
+            receivedData.messageImg || ""
+          );
+        } catch (error) {
+          console.error("Error parsing received message:", error);
+        }
+      };
+
+      socket.onerror = (error) => {
+        console.log("WebSocket Error:", error);
+        setIsSending(false);
+      };
+
+      socket.onclose = () => {
+        console.log("Connection closed. Reconnecting...");
+        setIsSending(false);
+        setTimeout(connectWebSocket, 3000);
+      };
     };
 
-    socket.onerror = (error) => console.log("WebSocket Error:", error);
-
-    socket.onclose = () => {
-      console.log("Connection closed.");
-    };
+    connectWebSocket();
 
     return () => {
-      socket.close();
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
     };
   }, []);
 
   const sendMessageToServer = () => {
-    if ((messageText.trim() || imageUri) && wsRef.current) {
+    if (isSending || !messageText.trim()) return;
+    
+    if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+      setIsSending(true);
+      
       const newMessage = {
         _id: uuid.v4(),
         messageImg: imageUri,
         user: { _id: mainUser, name: "me" },
-        text: messageText,
+        text: messageText.trim(),
         chatId: user_id,
       };
 
       console.log("Sending message:", newMessage);
 
-      wsRef.current.send(JSON.stringify(newMessage));
-      setMessageText("");
-      setImageUri("");
+      try {
+        wsRef.current.send(JSON.stringify(newMessage));
+        setMessageText("");
+        setImageUri("");
+      } catch (error) {
+        console.error("Error sending message:", error);
+      } finally {
+        setTimeout(() => setIsSending(false), 500);
+      }
     }
   };
 
@@ -300,11 +325,12 @@ const ChatScreen = () => {
           </View>
 
           <TouchableOpacity
-            style={styles.sendButton}
+            style={[styles.sendButton, (isSending || !messageText.trim()) && { opacity: 0.5 }]}
             onPress={sendMessageToServer}
+            disabled={isSending || !messageText.trim()}
           >
             <IconButton
-              name={messageText ? "send" : "microphone"}
+              name={isSending ? "loading" : (messageText.trim() ? "send" : "microphone")}
               size={24}
               color={colors.text}
             />

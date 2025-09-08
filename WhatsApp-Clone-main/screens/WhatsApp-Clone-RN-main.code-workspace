@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../WhatsApp-Clone-Server-main"
+		}
+	],
+	"settings": {
+		"typescript.tsdk": "node_modules/typescript/lib"
+	}
+}
